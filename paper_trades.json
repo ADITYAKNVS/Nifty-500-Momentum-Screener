@@ -1,0 +1,74 @@
+[
+    {
+        "timestamp": "2026-04-05 19:41:50",
+        "ticker": "RBLBANK",
+        "action": "BUY",
+        "qty": 200,
+        "price": 301.0,
+        "status": "FILLED"
+    },
+    {
+        "timestamp": "2026-04-05 19:39:58",
+        "ticker": "MCX",
+        "action": "BUY",
+        "qty": 96,
+        "price": 2443.0,
+        "status": "FILLED"
+    },
+    {
+        "timestamp": "2026-04-05 19:39:35",
+        "ticker": "NETWEB",
+        "action": "BUY",
+        "qty": 79,
+        "price": 3155.0,
+        "status": "FILLED"
+    },
+    {
+        "timestamp": "2026-04-05 19:35:26",
+        "ticker": "ANANDRATHI",
+        "action": "BUY",
+        "qty": 41,
+        "price": 3208.2,
+        "status": "FILLED"
+    },
+    {
+        "timestamp": "2026-04-05 19:34:59",
+        "ticker": "RBLBANK",
+        "action": "SELL",
+        "qty": 20,
+        "price": 301.0,
+        "status": "FILLED"
+    },
+    {
+        "timestamp": "2026-04-05 19:34:44",
+        "ticker": "RBLBANK",
+        "action": "BUY",
+        "qty": 20,
+        "price": 301.0,
+        "status": "FILLED"
+    },
+    {
+        "timestamp": "2026-04-05 19:34:11",
+        "ticker": "FORCEMOT",
+        "action": "BUY",
+        "qty": 15,
+        "price": 21126.0,
+        "status": "FILLED"
+    },
+    {
+        "timestamp": "2026-04-05 19:34:02",
+        "ticker": "FINCABLES",
+        "action": "SELL",
+        "qty": 100,
+        "price": 797.65,
+        "status": "FILLED"
+    },
+    {
+        "timestamp": "2026-04-05 18:22:01",
+        "ticker": "FINCABLES",
+        "action": "BUY",
+        "qty": 100,
+        "price": 797.65,
+        "status": "FILLED"
+    }
+]

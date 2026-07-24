@@ -1,0 +1,35 @@
+{
+    "cash": 7600.800000000047,
+    "positions": [
+        {
+            "ticker": "FORCEMOT",
+            "strategy": "Momentum V2",
+            "qty": 15,
+            "avg_price": 21126.0
+        },
+        {
+            "ticker": "ANANDRATHI",
+            "strategy": "Momentum V2",
+            "qty": 41,
+            "avg_price": 3208.2
+        },
+        {
+            "ticker": "NETWEB",
+            "strategy": "Momentum V2",
+            "qty": 79,
+            "avg_price": 3155.0
+        },
+        {
+            "ticker": "MCX",
+            "strategy": "Momentum V2",
+            "qty": 96,
+            "avg_price": 2443.0
+        },
+        {
+            "ticker": "RBLBANK",
+            "strategy": "Momentum V2",
+            "qty": 200,
+            "avg_price": 301.0
+        }
+    ]
+}

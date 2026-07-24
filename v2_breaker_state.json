@@ -1,0 +1,11 @@
+{
+    "tripped": false,
+    "tripped_date": null,
+    "last_month_return": 0.0,
+    "month_start_capital": 1000000,
+    "month_start_date": "2026-06-19",
+    "high_water_mark": 1000000,
+    "current_capital": 1000000,
+    "kill_switch_active": false,
+    "kill_switch_date": null
+}

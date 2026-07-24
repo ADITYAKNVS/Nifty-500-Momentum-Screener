@@ -1,0 +1,17 @@
+{
+    "nifty_level": 0,
+    "regime": "Spreads Engine Active",
+    "scanned_date": "2026-04-02",
+    "portfolio_value": 1000000,
+    "signals": [],
+    "sector_stats": {
+        "Bull Call Spread": {
+            "avg_score": 95,
+            "signal": "Bullish"
+        },
+        "Bear Put Spread": {
+            "avg_score": 90,
+            "signal": "Bearish"
+        }
+    }
+}

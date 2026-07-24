@@ -1,0 +1,101 @@
+Ticker,Sector,IsFinanceSector,NetProfitNegative,EBITDA_Negative,ROE,ROCE,DebtEquity,ICR,GrossNPA_Pct,CAR_Pct,RevenueDecline2Yr,PromoterHolding,PromoterPledge,PledgeIncreasing3Qtrs,MarketCap_Cr,AuditorFlag,PromoterSelling,LastUpdated
+ABB,Capital Goods,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+ACC,Construction Materials,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+ADANIGREEN,Power,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+ADANIPORTS,Services,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+ALKEM,Healthcare,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+AMBUJACEM,Construction Materials,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+APLLTD,Unknown,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+ASHOKLEY,Capital Goods,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+ASIANPAINT,Consumer Durables,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+AUROPHARMA,Healthcare,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+AXISBANK,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+BAJAJ-AUTO,Automobile and Auto Components,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+BAJAJFINSV,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+BAJFINANCE,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+BANDHANBNK,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+BANKBARODA,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+BERGER,Unknown,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+BHARTIARTL,Telecommunication,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+BIOCON,Healthcare,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+BOSCHLTD,Automobile and Auto Components,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+BPCL,Oil Gas & Consumable Fuels,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+BRITANNIA,Fast Moving Consumer Goods,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+CANBK,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+CHOLAFIN,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+CIPLA,Healthcare,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+COALINDIA,Oil Gas & Consumable Fuels,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+COFORGE,Information Technology,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+COLPAL,Fast Moving Consumer Goods,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+DABUR,Fast Moving Consumer Goods,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+DIVISLAB,Healthcare,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+DLF,Realty,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+DRREDDY,Healthcare,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+EICHERMOT,Automobile and Auto Components,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+FEDERALBNK,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+GAIL,Oil Gas & Consumable Fuels,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+GODREJCP,Fast Moving Consumer Goods,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+GODREJPROP,Realty,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+HAVELLS,Consumer Durables,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+HCLTECH,Information Technology,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+HDFCBANK,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+HDFCLIFE,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+HEROMOTOCO,Automobile and Auto Components,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+HINDALCO,Metals & Mining,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+HINDUNILVR,Fast Moving Consumer Goods,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+ICICIBANK,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+ICICIGI,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+IDEA,Telecommunication,False,True,False,-50.0,-10.0,5.2,0.3,0.0,15.0,True,37.0,0.0,False,8000,False,False,2025-01-01
+IDFCFIRSTB,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+INDIAMART,Consumer Services,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+INDUSINDBK,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+INFY,Information Technology,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+IOC,Oil Gas & Consumable Fuels,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+ITC,Fast Moving Consumer Goods,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+JSWSTEEL,Metals & Mining,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+JUBLFOOD,Consumer Services,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+KOTAKBANK,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+LT,Construction,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+LTIM,Unknown,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+LTTS,Information Technology,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+LUPIN,Healthcare,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+M&M,Automobile and Auto Components,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+MARICO,Fast Moving Consumer Goods,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+MARUTI,Automobile and Auto Components,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+MOTHERSON,Automobile and Auto Components,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+MPHASIS,Information Technology,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+NATIONALUM,Metals & Mining,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+NESTLEIND,Fast Moving Consumer Goods,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+NMDC,Metals & Mining,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+NTPC,Power,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+OBEROIREALTY,Unknown,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+ONGC,Oil Gas & Consumable Fuels,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+PERSISTENT,Information Technology,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+PETRONET,Oil Gas & Consumable Fuels,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+PIDILITIND,Chemicals,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+PNB,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+POWERGRID,Power,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+PRESTIGE,Realty,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+RAMCOCEM,Construction Materials,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+RELIANCE,Oil Gas & Consumable Fuels,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+SAIL,Metals & Mining,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+SBILIFE,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+SBIN,Financial Services,True,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+SHREECEM,Construction Materials,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+SIEMENS,Capital Goods,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+SUNPHARMA,Healthcare,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+TATACONSUM,Fast Moving Consumer Goods,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+TATAMOTORS,Unknown,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+TATAPOWER,Power,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+TATASTEEL,Metals & Mining,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+TCS,Information Technology,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+TECHM,Information Technology,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+TITAN,Consumer Durables,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+TORNTPHARM,Healthcare,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+TVSMOTOR,Automobile and Auto Components,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+ULTRACEMCO,Construction Materials,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+VBL,Fast Moving Consumer Goods,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+VEDL,Metals & Mining,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+VOLTAS,Consumer Durables,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+WIPRO,Information Technology,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,10000,False,False,2025-01-01
+ZEEL,Media Entertainment & Publication,False,False,False,15.0,15.0,0.5,3.0,0.0,15.0,False,50.0,0.0,False,4000,False,True,2025-01-01

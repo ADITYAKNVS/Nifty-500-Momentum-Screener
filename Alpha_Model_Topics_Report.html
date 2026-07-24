@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha Model — Complete Topics & Concepts Report</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f0f1a;
+            color: #e0e0e0;
+            line-height: 1.7;
+            padding: 40px;
+        }
+
+        @media print {
+            body { background: white; color: #1a1a2e; padding: 20px; }
+            .cover { background: linear-gradient(135deg, #1a1a2e, #16213e) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .section { break-inside: avoid; }
+            .topic-card { break-inside: avoid; border: 1px solid #ddd !important; background: #f8f9fa !important; }
+            .strategy-card { break-inside: avoid; }
+        }
+
+        .cover {
+            background: linear-gradient(135deg, #0f0f2a 0%, #1a0a3e 50%, #0a1628 100%);
+            border-radius: 24px;
+            padding: 80px 60px;
+            text-align: center;
+            margin-bottom: 50px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 50%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+        }
+
+        .cover h1 {
+            font-size: 3em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .cover .subtitle {
+            font-size: 1.3em;
+            color: #a0a0c0;
+            font-weight: 300;
+            position: relative;
+        }
+
+        .cover .date {
+            margin-top: 30px;
+            font-size: 0.95em;
+            color: #6b7280;
+            position: relative;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-header {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #8b5cf6;
+            margin-bottom: 8px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .section-desc {
+            color: #9ca3af;
+            font-size: 0.95em;
+            margin-bottom: 24px;
+        }
+
+        .strategy-card {
+            background: linear-gradient(135deg, rgba(30, 30, 60, 0.8), rgba(20, 20, 50, 0.6));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .strategy-card h3 {
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .strategy-card .badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .badge-pro { background: rgba(139, 92, 246, 0.2); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.4); }
+        .badge-momentum { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
+        .badge-god { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4); }
+
+        .topic-card {
+            background: rgba(25, 25, 50, 0.6);
+            border: 1px solid rgba(100, 100, 150, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .topic-card h4 {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #c4b5fd;
+            margin-bottom: 8px;
+        }
+
+        .topic-card p {
+            color: #b0b0c8;
+            font-size: 0.92em;
+        }
+
+        .formula {
+            background: rgba(139, 92, 246, 0.08);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.88em;
+            color: #c4b5fd;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .params-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            font-size: 0.88em;
+        }
+
+        .params-table th {
+            background: rgba(139, 92, 246, 0.15);
+            color: #a78bfa;
+            padding: 10px 16px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .params-table td {
+            padding: 8px 16px;
+            border-bottom: 1px solid rgba(100, 100, 150, 0.15);
+            color: #b0b0c8;
+        }
+
+        .params-table tr:nth-child(even) td {
+            background: rgba(139, 92, 246, 0.03);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            body { padding: 16px; }
+            .cover { padding: 40px 24px; }
+            .cover h1 { font-size: 2em; }
+        }
+
+        .toc {
+            background: rgba(25, 25, 50, 0.8);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 50px;
+        }
+
+        .toc h2 {
+            font-size: 1.4em;
+            color: #8b5cf6;
+            margin-bottom: 16px;
+        }
+
+        .toc ol {
+            padding-left: 24px;
+        }
+
+        .toc li {
+            padding: 6px 0;
+            color: #a0a0c0;
+            font-size: 0.95em;
+        }
+
+        .toc li strong {
+            color: #c4b5fd;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.08));
+            border-left: 4px solid #8b5cf6;
+            border-radius: 0 12px 12px 0;
+            padding: 16px 20px;
+            margin: 14px 0;
+            font-size: 0.92em;
+            color: #c4b5fd;
+        }
+
+        .condition-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .condition-list li {
+            padding: 4px 0;
+            padding-left: 24px;
+            position: relative;
+            color: #b0b0c8;
+            font-size: 0.9em;
+        }
+
+        .condition-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+            z-index: 100;
+        }
+
+        .print-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(139, 92, 246, 0.5);
+        }
+
+        @media print {
+            .print-btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">📄 Save as PDF</button>
+
+<!-- ═══════════════════════════════════ COVER ═══════════════════════════════════ -->
+<div class="cover">
+    <h1>Alpha Quant Model</h1>
+    <div class="subtitle">Complete Topics, Concepts & Technical Documentation</div>
+    <div class="date">Report Generated: March 26, 2026 &nbsp;|&nbsp; Universe: NIFTY 500 &nbsp;|&nbsp; Data: 2014–2026</div>
+</div>
+
+<!-- ═══════════════════════════════════ TOC ═══════════════════════════════════ -->
+<div class="toc">
+    <h2>📋 Table of Contents</h2>
+    <ol>
+        <li><strong>Strategy Overview</strong> — Institutional momentum strategies and performance drivers</li>
+        <li><strong>Technical Indicators</strong> — Momentum Scoring, ATR, SMA, Realized Volatility</li>
+        <li><strong>Market Regime Filters</strong> — SMA-200, SMA-100, Absolute Momentum</li>
+        <li><strong>Signal Generation & Entry Logic</strong> — Ranking-based selection, hold rank buffers</li>
+        <li><strong>Risk Management & Exit Logic</strong> — Trailing stops, rebalance frequency, cooldowns</li>
+        <li><strong>Position Sizing & Portfolio Management</strong> — Concentrated allocation, leverage, sector capping</li>
+        <li><strong>Cost & Slippage Modeling</strong> — Transaction costs, liquidity realism, ADV participation</li>
+        <li><strong>Backtesting Framework</strong> — Walk-forward analysis, T+1 execution, rollover logic</li>
+        <li><strong>Robustness Testing</strong> — Monte Carlo (3 methods), liquidity realism, sensitivity analysis</li>
+        <li><strong>Live Execution Pipeline</strong> — Daily scanner, portfolio manager, dashboard</li>
+    </ol>
+</div>
+
+<!-- ═══════════════════════════════════ 1. STRATEGIES ═══════════════════════════════════ -->
+<div class="section">
+    <div class="section-header">1. Strategy Overview</div>
+    <div class="strategy-desc">The Alpha Model contains two core institutional strategies, each targeting a different market edge.</div>
+
+    <!-- Momentum V1 -->
+    <div class="strategy-card">
+        <h3 style="color: #4ade80;">Monthly Momentum V1 — Top 20 Rotation</h3>
+        <span class="badge badge-momentum">MONTHLY REBALANCE • NIFTY 500</span>
+        <p style="color:#b0b0c8; margin-bottom:12px;">
+            A classic cross-sectional momentum strategy that ranks all NIFTY 500 stocks by their 6-month (126-day) return, selects the Top 20, and equally-weights them. Rebalances at the end of each month. Goes 100% cash when the market regime turns bearish.
+        </p>
+        <table class="params-table">
+            <tr><th>Parameter</th><th>Value</th><th>Purpose</th></tr>
+            <tr><td>Momentum Window</td><td>126 days (~6 months)</td><td>Lookback for return ranking</td></tr>
+            <tr><td>Top N Stocks</td><td>20</td><td>Portfolio concentration</td></tr>
+            <tr><td>Weighting</td><td>Equal (5% each)</td><td>Diversification across winners</td></tr>
+            <tr><td>Regime Filter</td><td>SMA 200</td><td>Nifty 50 &gt; 200-day SMA</td></tr>
+            <tr><td>Hold Period</td><td>~30 days (EOM rebalance)</td><td>Monthly rotation</td></tr>
+            <tr><td>Trend Filter</td><td>Stock &gt; its SMA 200</td><td>Only buy stocks in uptrend</td></tr>
+        </table>
+    </div>
+
+    <!-- Momentum Alpha Pro -->
+    <div class="strategy-card">
+        <h3 style="color: #fbbf24;">Momentum Alpha Pro — Concentrated Strategy</h3>
+        <span class="badge badge-god">EXTREME CONCENTRATION • 1.1× LEVERAGE</span>
+        <p style="color:#b0b0c8; margin-bottom:12px;">
+            An aggressive variant that uses 12-month-minus-1-month momentum scoring (avoiding short-term mean reversion), selects only the Top 5 stocks, and applies 1.1× leverage. Uses a faster SMA-100 regime filter and has a "hold rank buffer" of 15 to reduce unnecessary turnover.
+        </p>
+        <table class="params-table">
+            <tr><th>Parameter</th><th>Value</th><th>Purpose</th></tr>
+            <tr><td>Momentum Window</td><td>252 days (~12 months)</td><td>Long-term structural momentum</td></tr>
+            <tr><td>Skip Recent Days</td><td>21 (~1 month)</td><td>Avoid short-term reversal effect</td></tr>
+            <tr><td>Top N Stocks</td><td>5</td><td>Extreme concentration for alpha</td></tr>
+            <tr><td>Leverage</td><td>1.10×</td><td>Mild leverage for return amplification</td></tr>
+            <tr><td>Regime SMA</td><td>100</td><td>Faster crash protection vs SMA200</td></tr>
+            <tr><td>Hold Rank Buffer</td><td>15</td><td>Keep stock if still in top 15 rank</td></tr>
+            <tr><td>Allocation per Stock</td><td>22% (1.1× / 5)</td><td>High conviction positions</td></tr>
+            <tr><td>Min Turnover</td><td>₹1 Cr ADT</td><td>Loosened for broader universe</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════ 2. TECHNICAL INDICATORS ═══════════════════════════════════ -->
+<div class="section">
+    <div class="section-header">2. Technical Indicators Used</div>
+    <div class="section-desc">Institutional indicators and momentum factors powering signal generation.</div>
+
+    <div class="topic-card">
+        <h4>2.4 — Average True Range (ATR)</h4>
+        <p>Measures daily volatility by computing the true range (max of: High−Low, |High−Prev Close|, |Low−Prev Close|) and averaging over 14 days. Used to set adaptive stop losses and profit targets.</p>
+        <div class="formula">
+            True Range = max(High−Low, |High−Prev Close|, |Low−Prev Close|)<br>
+            ATR = 14-day Simple Moving Average of True Range<br>
+            Stop Loss = Entry − 1.5 × ATR &nbsp;|&nbsp; Target = Entry + 2.5 × ATR
+        </div>
+    </div>
+
+    <div class="grid-2">
+
+        <div class="topic-card">
+            <h4>2.6 — Simple Moving Average (SMA 200 & SMA 50)</h4>
+            <p>Classic trend filters. SMA-200 determines long-term trend direction for individual stocks. SMA-50 is used for market breadth calculations (% of stocks above 50-day MA).</p>
+            <div class="formula">
+                Stock Filter: Close &gt; SMA(200)<br>
+                Market Breadth: % of Nifty 500 above SMA(50) &gt; 45%
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="topic-card">
+            <h4>2.7 — 6-Month Momentum Return (V1)</h4>
+            <p>Simple percentage return over 126 trading days. Stocks are ranked by this return to identify the strongest performers for the momentum portfolio.</p>
+            <div class="formula">
+                Momentum = (Close / Close[126 days ago]) − 1
+            </div>
+        </div>
+
+        <div class="topic-card">
+            <h4>2.8 — 12M-minus-1M Momentum (Alpha Pro)</h4>
+            <p>Uses close price from 21 days ago divided by close from 252 days ago. Skipping the most recent month avoids the well-documented short-term mean reversion effect.</p>
+            <div class="formula">
+                Score = (Close[21d ago] / Close[252d ago]) − 1<br>
+                This is the Jegadeesh-Titman "12−1" momentum factor.
+            </div>
+        </div>
+    </div>
+
+
+    <div class="grid-2">
+        <div class="topic-card">
+            <h4>2.9 — Relative Strength vs Market</h4>
+            <p>126-day return of the stock vs the market proxy. Only stocks outperforming the Nifty 50 are eligible.</p>
+            <div class="formula">Stock Return(126d) &gt; Market Return(126d)</div>
+        </div>
+
+        <div class="topic-card">
+            <h4>2.10 — Realized Volatility (20-Day Annualized)</h4>
+            <p>Used in Alpha Pro for risk-adjusted momentum scoring and inverse-volatility weighting.</p>
+            <div class="formula">Vol = Std(Daily Returns, 20) × √252</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════ 3. MARKET REGIME ═══════════════════════════════════ -->
+<div class="section">
+    <div class="section-header">3. Market Regime Filters</div>
+    <div class="section-desc">Top-down filters that prevent trading during bear markets — the single biggest alpha driver.</div>
+
+    <div class="topic-card">
+        <h4>3.1 — SMA-200 Regime Filter (Momentum V1)</h4>
+        <p>When the Nifty 50 index trades below its 200-day SMA, the market is declared bearish and <strong>ALL trading is halted</strong>. 100% cash. This simple rule has historically avoided major drawdowns (2020 COVID crash, 2022 bear market).</p>
+        <div class="formula">Regime = Bullish if NIFTY 50 Close &gt; SMA(NIFTY 50 Close, 200)</div>
+    </div>
+
+    <div class="topic-card">
+        <h4>3.2 — SMA-100 Fast Regime Filter (Alpha Pro)</h4>
+        <p>Uses a faster 100-day SMA for quicker regime switching. Gets into cash faster during crashes but also re-enters faster during recoveries. Backtested to provide better risk-adjusted returns for the concentrated 5-stock strategy.</p>
+        <div class="formula">Regime = Bullish if NIFTY 50 Close &gt; SMA(NIFTY 50 Close, 100)</div>
+    </div>
+
+        <div class="topic-card">
+            <h4>3.3 — Absolute Momentum Filter</h4>
+            <p>Requires the Nifty 50's own 126-day return to be positive. Combines with SMA filter for double confirmation during Alpha Pro backtesting.</p>
+        </div>
+
+    <div class="topic-card">
+        <h4>3.5 — Market Proxy Construction (Backtest)</h4>
+        <p>In backtesting (where Nifty index data may be unavailable for the full history), a synthetic market proxy is constructed by averaging the closing prices of the top 5 large-cap stocks: <strong>RELIANCE, HDFCBANK, TCS, INFY, ICICIBANK</strong>. The SMA-200 regime is computed on this proxy.</p>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════ 4. SIGNAL GENERATION ═══════════════════════════════════ -->
+<div class="section">
+    <div class="section-header">4. Signal Generation & Entry Logic</div>
+
+    <div class="strategy-card">
+        <h3 style="color: #4ade80;">Momentum V1 & Alpha Pro — Ranking-Based Selection</h3>
+        <p style="color:#9ca3af; margin-bottom:14px;">No complex signal — simply rank, filter, and select:</p>
+        <ol style="padding-left:20px; color: #b0b0c8; font-size:0.92em;">
+            <li>Filter universe by: Close &gt; SMA(200), Avg Turnover &gt; min threshold, Close &gt; ₹10</li>
+            <li>Compute momentum score (6M return for V1; 12M−1M for Alpha Pro)</li>
+            <li>Rank all eligible stocks by momentum score descending</li>
+            <li>Select Top N (20 for V1, 5 for Alpha Pro)</li>
+            <li>Alpha Pro only: Apply "Hold Rank Buffer" — keep existing holdings if still within top 15 rank</li>
+        </ol>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════ 5. RISK MANAGEMENT ═══════════════════════════════════ -->
+<div class="section">
+    <div class="section-header">5. Risk Management & Exit Logic</div>
+
+    <div class="grid-2">
+        <div class="topic-card">
+            <h4>5.1 — ATR-Based Stop Loss</h4>
+            <p>Stop loss is placed 1.5× ATR below the entry price. Adapts to each stock's volatility — wide stops for volatile stocks, tight stops for calm ones.</p>
+            <div class="formula">Stop = Entry Price − 1.5 × ATR(14)</div>
+        </div>
+
+        <div class="topic-card">
+            <h4>5.2 — ATR-Based Profit Target</h4>
+            <p>Fixed target at 2.5× ATR above entry. Gives a 1:1.67 Risk-Reward ratio. Ensures winners are systematically bigger than losers.</p>
+            <div class="formula">Target = Entry Price + 2.5 × ATR(14)</div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+
+        <div class="topic-card">
+            <h4>5.4 — Maximum Hold Period</h4>
+            <p>Positions are forcibly closed after 60 trading days. Prevents capital from being trapped in sideways moves that didn't hit stop or target.</p>
+            <div class="formula">Exit after 60 trading days</div>
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="topic-card">
+            <h4>5.4 — Trailing Stop (Alpha Pro)</h4>
+            <p>An optional 15% trailing stop from the peak price, tested during Alpha Pro diagnostics. Activates when price drops 15% from its highest point post-entry.</p>
+            <div class="formula">Stop = Peak Price × (1 − 0.15)</div>
+        </div>
+
+            <div class="formula">Cooldown = 5 trading days after exit</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════ 6. POSITION SIZING ═══════════════════════════════════ -->
+<div class="section">
+    <div class="section-header">6. Position Sizing & Portfolio Construction</div>
+
+        <div class="topic-card">
+            <h4>6.1 — Equal Weighting (Momentum)</h4>
+            <p>V1: 5% per stock (20 stocks). Alpha Pro: 22% per stock (5 stocks × 1.1× leverage). Simple and effective for momentum strategies.</p>
+        </div>
+
+    <div class="grid-2">
+        <div class="topic-card">
+            <h4>6.2 — Inverse Volatility Weighting</h4>
+            <p>Tested in Alpha Pro diagnostics. Allocates more capital to lower-volatility stocks. Portfolio weight = (1/Vol) / Σ(1/Vol).</p>
+        </div>
+
+        <div class="topic-card">
+            <h4>6.3 — Sector Capping</h4>
+            <p>Limits each sector to maximum 4 stocks in the portfolio. Prevents concentrated sector bets from dominating returns.</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- ═══════════════════════════════════ 7. COST MODELING ═══════════════════════════════════ -->
+<div class="section">
+    <div class="section-header">7. Transaction Cost & Slippage Modeling</div>
+
+    <div class="grid-2">
+        <div class="topic-card">
+            <h4>7.1 — Round-Trip Cost</h4>
+            <p>Fixed 25–35 basis points per round trip, covering brokerage, STT (Securities Transaction Tax), GST, and exchange charges.</p>
+            <div class="formula">
+                Average Cost: 35 bps (0.35%)
+            </div>
+        </div>
+
+            <div class="formula">
+                Entry Price × (1 + 0.0015)<br>
+                Exit Price × (1 − 0.0015)
+            </div>
+    </div>
+
+    <div class="topic-card">
+        <h4>7.3 — Variable Slippage by ADV Participation (Liquidity Realism)</h4>
+        <p>An advanced slippage model that scales cost based on how much of a stock's Average Daily Volume (ADV) the trade consumes. Larger trades in less liquid stocks face higher impact.</p>
+        <table class="params-table">
+            <tr><th>Participation Rate</th><th>Slippage Applied</th><th>Market Impact</th></tr>
+            <tr><td>≤ 2% of ADV</td><td>0.50%</td><td>Negligible</td></tr>
+            <tr><td>2% – 5% of ADV</td><td>0.75%</td><td>Low</td></tr>
+            <tr><td>5% – 10% of ADV</td><td>1.00%</td><td>Moderate</td></tr>
+            <tr><td>&gt; 10% of ADV</td><td>1.50%</td><td>Significant</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════ 8. BACKTESTING ═══════════════════════════════════ -->
+<div class="section">
+    <div class="section-header">8. Backtesting Framework</div>
+
+
+        <p>Train on historical data up to Year Y−1, test on Year Y, then roll forward. Validates that the strategy works when parameters are selected <em>before</em> seeing the test data. Tested across V1 Baseline, SMA100, and Alpha Pro Top 5 variants.</p>
+        <div class="formula">Train: 2015 to Y−1 → Test: Year Y → Roll forward</div>
+    </div>
+
+    <div class="topic-card">
+        <h4>8.3 — T+1 Open Execution Simulation</h4>
+        <p>The live simulation engine generates signals at day-close but executes at next-day-open prices — the realistic execution model. This avoids the "close-to-close" bias present in naive backtests.</p>
+        <div class="highlight-box">
+            <strong>Live Simulation Engine:</strong> Runs year-by-year from 2015–2026 with a rolling walk-forward parameter grid search, T+1 Open execution, and physical share/cash rollover between years.
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <h4>8.4 — Performance Metrics Computed</h4>
+        <table class="params-table">
+            <tr><th>Metric</th><th>Formula</th></tr>
+            <tr><td>CAGR</td><td>(Final / Initial)^(1/Years) − 1</td></tr>
+            <tr><td>Sharpe Ratio</td><td>(Mean Excess Return / StdDev) × √252, Rf = 6%</td></tr>
+            <tr><td>Sortino Ratio</td><td>(Mean Excess Return / Downside StdDev) × √252</td></tr>
+            <tr><td>Max Drawdown</td><td>(Trough − Peak) / Peak</td></tr>
+            <tr><td>Win Rate</td><td>% of trades with positive return</td></tr>
+            <tr><td>Profit Factor</td><td>Gross Profit / Gross Loss</td></tr>
+            <tr><td>Annualized Volatility</td><td>StdDev(Daily Returns) × √252</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════ 9. ROBUSTNESS ═══════════════════════════════════ -->
+<div class="section">
+    <div class="section-header">9. Robustness & Stress Testing</div>
+    <div class="section-desc">Five independent robustness tests validate that the strategy isn't a statistical artifact.</div>
+
+    <div class="strategy-card">
+        <h3 style="color: #3b82f6;">9.1 — Monte Carlo Simulations (3 Tests)</h3>
+        
+        <div class="topic-card" style="margin-top:16px;">
+            <h4>Test 1: Return Noise Injection (200 sims)</h4>
+            <p>Adds random N(0, 0.5%) noise to each daily return. Simulates real-world execution slippage, bid-ask spread variation, and fill timing uncertainty. Strategy must maintain Median CAGR &gt; 25% and Worst-Case DD &gt; −50%.</p>
+        </div>
+
+        <div class="topic-card">
+            <h4>Test 2: Trade Shuffle (200 sims)</h4>
+            <p>Keeps the same set of daily returns but randomly shuffles their order. Tests whether performance depends on "lucky sequencing" of trades. If Sharpe survives shuffling, the edge is in trade selection, not timing luck.</p>
+        </div>
+
+        <div class="topic-card">
+            <h4>Test 3: Crash Injection (100 sims)</h4>
+            <p>Injects a synthetic 5-day, −10%/day crash at a random point in the equity curve. Tests survivability during extreme tail events. Strategy must still show positive CAGR after any crash placement.</p>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <h4>9.2 — Liquidity Realism Test</h4>
+        <p>Tests strategy performance under increasingly strict liquidity filters (₹1Cr → ₹10Cr minimum daily turnover). Uses T+1 Open execution and variable slippage based on ADV participation rate. Tracks metrics like average participation, max participation, and % of trades exceeding 5% or 10% ADV.</p>
+        <div class="highlight-box">
+            <strong>Pass criteria:</strong> CAGR stays &gt; 20% across all liquidity levels, CAGR drop &lt; 30%, DD stays within −50%, Max participation &lt; 20%.
+        </div>
+    </div>
+
+    <div class="grid-2">
+        <div class="topic-card">
+            <h4>9.3 — 2D Sensitivity Analysis</h4>
+            <p>Grid search over key parameter pairs (e.g., VHF Threshold vs Z-Score Threshold) to verify the strategy isn't sitting on a narrow parameter peak. A robust strategy should show stable performance across a range of nearby parameter values.</p>
+        </div>
+
+        <div class="topic-card">
+            <h4>9.4 — Isolated Year-by-Year Analysis</h4>
+            <p>Runs the backtest independently for each calendar year to identify whether returns are driven by one or two outlier years or are broadly distributed. Checks for consistency across bull, bear, and flat market environments.</p>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <h4>9.5 — Alpha Pro Diagnostic Testing (A/B Variants)</h4>
+        <p>Systematically tests individual improvements over the V1 baseline to identify which factors genuinely improve risk-adjusted returns:</p>
+        <table class="params-table">
+            <tr><th>Variant</th><th>Change Tested</th></tr>
+            <tr><td>A — Weekly Rebalance</td><td>Monthly → Weekly rebalancing frequency</td></tr>
+            <tr><td>B — Faster Regime</td><td>SMA 200 → SMA 100 regime filter</td></tr>
+            <tr><td>C — Sector Cap</td><td>Max 4 stocks per sector</td></tr>
+            <tr><td>D — Trailing Stop</td><td>15% trailing stop from peak</td></tr>
+            <tr><td>E — Inverse Vol Weighting</td><td>Equal weight → Inverse volatility</td></tr>
+            <tr><td>F — Absolute Momentum</td><td>Additional filter: Market 126d return &gt; 0</td></tr>
+            <tr><td>G — Combined Winners</td><td>All variants that beat baseline Sharpe + DD</td></tr>
+            <tr><td>H — Alpha Pro</td><td>12M−1M momentum, Top 5, concentrated</td></tr>
+            <tr><td>I — Alpha Pro + Leverage</td><td>1.1× leverage on Alpha Pro</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════ 10. LIVE PIPELINE ═══════════════════════════════════ -->
+<div class="section">
+    <div class="section-header">10. Live Execution Pipeline</div>
+
+    <div class="topic-card">
+        <h4>10.1 — Daily Automated Pipeline</h4>
+        <p>The <code>daily_run.py</code> script orchestrates the full daily workflow:</p>
+        <ol style="padding-left:20px; color: #b0b0c8; font-size:0.92em;">
+            <li><strong>Update Data</strong> — Fetch latest prices for all Nifty 500 stocks from Yahoo Finance</li>
+            <li><strong>Run Portfolio Manager</strong> — Check open positions for stop/rebalance exits</li>
+            <li><strong>Run Momentum V1 Scanner</strong> — Generate monthly top-20 rotation list</li>
+            <li><strong>Run Alpha Pro Scanner</strong> — Generate seasonal top-5 list</li>
+            <li><strong>Save Signals</strong> — Output to JSON files for the frontend dashboard</li>
+        </ol>
+    </div>
+
+    <div class="grid-2">
+        <div class="topic-card">
+            <h4>10.2 — Frontend Dashboard</h4>
+            <p>HTML/CSS/JS dashboard displaying signals from both strategies, with sector distribution, alpha scores, and market regime status. Uses glassmorphism design with real-time data from JSON signal files.</p>
+        </div>
+
+        <div class="topic-card">
+            <h4>10.3 — Sector Mapping</h4>
+            <p>Comprehensive mapping of 100+ Nifty 500 tickers to sectors (IT, Banking, Financials, Energy, Auto, Metals, Pharma, FMCG, Infrastructure, Defense, etc.) for sector-level analysis and capping.</p>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <h4>10.4 — Data Infrastructure</h4>
+        <p>All price data stored in a single Parquet file (<code>nifty500_daily.parquet</code>) containing OHLCV data for ~500 stocks from 2014 to present (~19MB compressed). Updated daily via <code>update_daily.py</code> which fetches incremental data from Yahoo Finance.</p>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════ 11. TECHNOLOGY STACK ═══════════════════════════════════ -->
+<div class="section">
+    <div class="section-header">11. Technology Stack & Coding Methodologies</div>
+    <div class="section-desc">The underlying software engineering and mathematical tools powering the quant model.</div>
+
+    <div class="grid-2">
+        <div class="topic-card">
+            <h4>11.1 — Python & Vectorized Operations</h4>
+            <p>The entire engine is built in Python. To handle daily data for 500 stocks over 12 years (1.5 million+ data points), the model relies heavily on <strong>Pandas</strong> and <strong>NumPy</strong> for vectorized operations, avoiding slow <code>for</code> loops and computing indicators across the entire universe simultaneously.</p>
+        </div>
+
+    </div>
+
+    <div class="grid-2">
+        <div class="topic-card">
+            <h4>11.3 — Parquet Columnar Storage</h4>
+            <p>Historical data is stored in the <strong>Apache Parquet</strong> format (<code>nifty500_daily.parquet</code>) via PyArrow. Parquet provides massive compression (reducing file size to ~19MB) and lightning-fast read speeds compared to standard CSV files, crucial for rapid backtesting iterations.</p>
+        </div>
+
+        <div class="topic-card">
+            <h4>11.3 — Statistical Standardization (Z-Scores)</h4>
+            <p>The model uses Z-Scores to normalize variables. It calculates rolling means and standard deviations to translate price momentum into statistically significant signals (Z &gt; 1.0).</p>
+        </div>
+    </div>
+
+    <div class="topic-card">
+        <h4>11.5 — Monte Carlo Simulation Algorithms</h4>
+        <p>The robustness engine uses programmatic simulated randomness (using <code>numpy.random</code>). It applies Gaussian (Normal) distributions to inject noise into daily returns, and uses seeded pseudo-random number generators to identically shuffle trading sequences hundreds of times to isolate the "skill vs luck" factor.</p>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════ SUMMARY ═══════════════════════════════════ -->
+<div class="section">
+    <div class="section-header">Summary of All Topics Used</div>
+
+    <table class="params-table">
+        <tr><th>#</th><th>Topic</th><th>Category</th><th>Used In</th></tr>
+        <tr><td>1</td><td>Simple Moving Averages (SMA 50/100/200)</td><td>Trend Filter</td><td>All</td></tr>
+        <tr><td>2</td><td>6-Month Momentum (126-day return)</td><td>Momentum Factor</td><td>V1</td></tr>
+        <tr><td>3</td><td>12M−1M Momentum (Jegadeesh-Titman)</td><td>Momentum Factor</td><td>Alpha Pro</td></tr>
+        <tr><td>4</td><td>Realized Volatility (Annualized)</td><td>Risk Metric</td><td>Alpha Pro</td></tr>
+        <tr><td>5</td><td>Market Regime (SMA 200/100)</td><td>Macro Filter</td><td>All</td></tr>
+        <tr><td>6</td><td>Absolute Momentum Filter</td><td>Macro Filter</td><td>Alpha Pro Diagnostics</td></tr>
+        <tr><td>7</td><td>Trailing Stop (15% from Peak)</td><td>Risk Management</td><td>Diagnostics</td></tr>
+        <tr><td>8</td><td>Equal Weight Portfolio</td><td>Portfolio Construction</td><td>V1, Alpha Pro</td></tr>
+        <tr><td>9</td><td>Inverse Volatility Weighting</td><td>Portfolio Construction</td><td>Diagnostics</td></tr>
+        <tr><td>10</td><td>Sector Capping</td><td>Portfolio Construction</td><td>Diagnostics</td></tr>
+        <tr><td>11</td><td>Hold Rank Buffer</td><td>Turnover Reduction</td><td>Alpha Pro</td></tr>
+        <tr><td>12</td><td>Leverage (1.1×)</td><td>Return Amplification</td><td>Alpha Pro</td></tr>
+        <tr><td>13</td><td>Liquidity Filtering (ADT threshold)</td><td>Risk Control</td><td>All</td></tr>
+        <tr><td>14</td><td>Transaction Cost Modeling (35 bps)</td><td>Realistic Backtesting</td><td>All Backtests</td></tr>
+        <tr><td>15</td><td>Slippage Modeling (Fixed & Variable)</td><td>Realistic Backtesting</td><td>All Backtests</td></tr>
+        <tr><td>16</td><td>T+1 Open Execution</td><td>Realistic Backtesting</td><td>Live Sim Engine</td></tr>
+        <tr><td>17</td><td>Monte Carlo: Noise Injection</td><td>Robustness Testing</td><td>Alpha Pro</td></tr>
+        <tr><td>18</td><td>Monte Carlo: Trade Shuffle</td><td>Robustness Testing</td><td>Alpha Pro</td></tr>
+        <tr><td>19</td><td>Monte Carlo: Crash Injection</td><td>Robustness Testing</td><td>Alpha Pro</td></tr>
+        <tr><td>20</td><td>Liquidity Realism Testing</td><td>Robustness Testing</td><td>Alpha Pro</td></tr>
+        <tr><td>21</td><td>Walk-Forward Analysis</td><td>Validation</td><td>All Variants</td></tr>
+        <tr><td>22</td><td>2D Sensitivity Analysis</td><td>Robustness Testing</td><td>Parameter Stability</td></tr>
+        <tr><td>23</td><td>A/B Variant Testing</td><td>Strategy Development</td><td>Alpha Pro Diagnostics</td></tr>
+        <tr><td>24</td><td>CAGR / Sharpe / Sortino / Max DD / Win Rate</td><td>Performance Metrics</td><td>All</td></tr>
+        <tr><td>25</td><td>Equity Curve & Drawdown Analysis</td><td>Performance Metrics</td><td>All</td></tr>
+    </table>
+</div>
+
+<div style="text-align:center; padding:40px 0; color:#4b5563; font-size:0.85em;">
+    Alpha Quant Model — Topics Report &nbsp;|&nbsp; Generated March 2026 &nbsp;|&nbsp; 40 Topics Documented
+</div>
+
+</body>
+</html>

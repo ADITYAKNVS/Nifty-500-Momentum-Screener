@@ -1,0 +1,329 @@
+// ══════════════════════════════════════════════════════════════════════
+// Alpha Momentum V2 (God Mode) — TradingView Backtesting Strategy (v3 Overlay)
+// Replicates: scanner_momentum_v2.py
+// Author: Aditya K & Antigravity
+// ══════════════════════════════════════════════════════════════════════
+// 
+// EVERYTHING renders directly ON the candlestick chart.
+// No separate panes. No plots below. All lines on price action.
+//
+// HOW TO USE:
+// 1. Open TradingView → open any stock chart (e.g., NSE:RELIANCE or NSE:TATAMOTORS)
+// 2. Go to Pine Editor (bottom panel) → paste this entire script
+// 3. Click "Add to Chart"
+// 4. In the "Strategy Tester" tab, you will see the full historical backtest results.
+// ══════════════════════════════════════════════════════════════════════
+
+//@version=6
+strategy("Alpha Momentum V2 (God Mode) Strategy", shorttitle="Mom V2 Strategy v3", 
+         overlay=true, initial_capital=1000000, default_qty_type=strategy.percent_of_equity, 
+         default_qty_value=10, commission_type=strategy.commission.percent, 
+         commission_value=0.05, slippage=1, max_bars_back=5000)
+
+// ═══ INPUT PARAMETERS ═══
+group_core      = "Core Parameters"
+MOMENTUM_WINDOW = input.int(252,   "Momentum Lookback (bars)",      minval=50,  maxval=500,  group=group_core, tooltip="The undisputed king of net momentum — 1 year lookback")
+SKIP_DAYS       = input.int(21,    "Skip Days (mean-reversion)",    minval=0,   maxval=60,   group=group_core, tooltip="1-month mean-reversion firewall — skip recent month")
+REGIME_SMA_LEN  = input.int(100,   "Regime SMA Length",             minval=20,  maxval=300,  group=group_core, tooltip="Nifty 50 macro regime cutoff")
+TREND_SMA_LEN   = input.int(200,   "Stock Trend SMA",              minval=50,  maxval=300,  group=group_core, tooltip="Individual stock must be above this SMA")
+VOL_WINDOW      = input.int(60,    "Volatility Window (bars)",      minval=10,  maxval=120,  group=group_core, tooltip="60-day realized vol for risk-adjustment")
+CONSEC_DAYS     = input.int(3,     "Regime Confirmation Days",      minval=1,   maxval=10,   group=group_core, tooltip="Consecutive days to confirm regime flip")
+BEAR_MOM_FLOOR  = input.float(0.20,"Bear Mode Min Momentum",       minval=0.0, maxval=1.0,  step=0.05, group=group_core, tooltip="In bear market, require >20% absolute momentum")
+MIN_TURNOVER_CR = input.float(1.0, "Min Avg Turnover (₹ Crore)",   minval=0.1, maxval=50.0, step=0.5,  group=group_core, tooltip="Liquidity filter: average daily turnover")
+REGIME_INDEX    = input.string("NSE:NIFTY", "Regime Index Ticker",  group=group_core, tooltip="Index ticker used for macro regime filter (e.g. NSE:NIFTY, SP:SPX)")
+regime_enabled  = input.bool(true, "Use Market Regime Filter",      group=group_core, tooltip="If disabled or index data is missing, regime defaults to BULLISH")
+
+group_backtest  = "Backtest & Risk Settings"
+LEVERAGE        = input.float(1.10, "Leverage Factor",              minval=0.5, maxval=3.0,  step=0.1,  group=group_backtest, tooltip="Gross leverage of the position (1.10 = 110% of equity)")
+use_sl          = input.bool(false, "Enable Fixed Stop Loss",       group=group_backtest)
+sl_pct          = input.float(7.0,  "Stop Loss (%)",                minval=1.0, maxval=50.0, step=0.5,  group=group_backtest)
+use_trail       = input.bool(false, "Enable Trailing Stop",         group=group_backtest)
+trail_pct       = input.float(10.0, "Trailing Stop (%)",            minval=1.0, maxval=50.0, step=0.5,  group=group_backtest)
+use_tp          = input.bool(false, "Enable Take Profit",           group=group_backtest)
+tp_pct          = input.float(25.0, "Take Profit (%)",              minval=1.0, maxval=100.0, step=1.0, group=group_backtest)
+
+group_date      = "Backtest Date Range"
+start_year      = input.int(2018,   "Start Year",                   group=group_date)
+start_month     = input.int(1,      "Start Month",                  group=group_date)
+start_day       = input.int(1,      "Start Day",                    group=group_date)
+end_year        = input.int(2030,   "End Year",                     group=group_date)
+end_month       = input.int(12,     "End Month",                    group=group_date)
+end_day         = input.int(31,     "End Day",                      group=group_date)
+
+group_display   = "Display Settings"
+show_sma200     = input.bool(true,  "Show 200 SMA on Price",        group=group_display)
+show_regime     = input.bool(true,  "Show Regime Background",       group=group_display)
+show_signals    = input.bool(true,  "Show ▲▼ Signal Markers",       group=group_display)
+show_entry_lines= input.bool(true,  "Show Entry/SL/TP Lines",       group=group_display)
+show_bar_colors = input.bool(true,  "Color Candles by Momentum",    group=group_display)
+show_dashboard  = input.bool(true,  "Show Dashboard Table",         group=group_display)
+
+// ─────────────────────────────────────────────
+// ▌ COLORS (Premium Aesthetics matching DPS v3)
+// ─────────────────────────────────────────────
+color C_BULL     = color.new(#00E676, 0)     // Green
+color C_BEAR     = color.new(#FF1744, 0)     // Red
+color C_NEUTRAL  = color.new(#FFD740, 0)     // Yellow
+color C_TEXT     = color.new(#E0E0E0, 0)
+color C_HEADER   = color.new(#BB86FC, 0)
+color C_PANEL_BG = color.new(#1A1A2E, 10)
+color C_SL       = color.new(#FF5252, 20)
+color C_TP       = color.new(#69F0AE, 20)
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 1: DATE RANGE FILTER
+// ══════════════════════════════════════════════════════════════════════
+start_time = timestamp(start_year, start_month, start_day, 0, 0)
+end_time   = timestamp(end_year, end_month, end_day, 23, 59)
+in_date_range = time >= start_time and time <= end_time
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 2: DAILY RESOLUTION MOMENTUM & INDICATORS (Intraday Compatible)
+// ══════════════════════════════════════════════════════════════════════
+// We force calculations on the Daily ("1D") timeframe so that this strategy
+// works identically on Daily charts AND on Intraday charts (5m, 15m, etc.).
+
+// Daily Close and Volume (no lookahead for strict historical replication)
+d_close   = request.security(syminfo.tickerid, "1D", close, barmerge.gaps_off, barmerge.lookahead_off)
+d_volume  = request.security(syminfo.tickerid, "1D", volume, barmerge.gaps_off, barmerge.lookahead_off)
+
+// Daily Momentum Lookback
+d_prev_close    = request.security(syminfo.tickerid, "1D", close[MOMENTUM_WINDOW], barmerge.gaps_off, barmerge.lookahead_off)
+d_recent_close  = request.security(syminfo.tickerid, "1D", close[SKIP_DAYS], barmerge.gaps_off, barmerge.lookahead_off)
+raw_momentum    = (d_recent_close / d_prev_close) - 1
+
+// Daily Volatility (60-day annualized realized volatility)
+d_vol_60 = request.security(syminfo.tickerid, "1D", ta.stdev((close - close[1]) / close[1], VOL_WINDOW) * math.sqrt(252), barmerge.gaps_off, barmerge.lookahead_off)
+vol_60 = na(d_vol_60) ? 0.3 : d_vol_60
+
+// Risk-Adjusted Momentum
+risk_adj_mom = vol_60 > 0.001 ? raw_momentum / vol_60 : raw_momentum
+
+// Stock Trend (Daily 200 SMA)
+d_sma_200 = request.security(syminfo.tickerid, "1D", ta.sma(close, TREND_SMA_LEN), barmerge.gaps_off, barmerge.lookahead_off)
+above_trend = d_close > d_sma_200
+
+// Daily Turnover
+d_avg_turnover_20 = request.security(syminfo.tickerid, "1D", ta.sma(close * volume, 20), barmerge.gaps_off, barmerge.lookahead_off)
+has_volume = not na(d_volume) and d_avg_turnover_20 > 0
+liquidity_ok = not has_volume or d_avg_turnover_20 > (MIN_TURNOVER_CR * 1e7)
+
+stock_eligible = above_trend and liquidity_ok and d_close > 10
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 3: MARKET REGIME DETECTION (Daily Index Proxy)
+// ══════════════════════════════════════════════════════════════════════
+nifty_close = request.security(REGIME_INDEX, "1D", close, barmerge.gaps_off, barmerge.lookahead_off, ignore_invalid_symbol=true)
+nifty_sma   = request.security(REGIME_INDEX, "1D", ta.sma(close, REGIME_SMA_LEN), barmerge.gaps_off, barmerge.lookahead_off, ignore_invalid_symbol=true)
+has_regime_data = not na(nifty_close) and not na(nifty_sma)
+nifty_above_sma = has_regime_data ? nifty_close > nifty_sma : true
+
+// Daily confirmation triggers (only evaluates at start of each day)
+is_new_day = timeframe.isdaily ? true : (ta.change(time("D")) != 0)
+
+var int consec_above = 0
+var int consec_below = 0
+var bool regime_bullish = true
+
+if has_regime_data and regime_enabled
+    if is_new_day
+        if nifty_above_sma
+            consec_above := consec_above + 1
+            consec_below := 0
+        else
+            consec_below := consec_below + 1
+            consec_above := 0
+
+        if consec_above >= CONSEC_DAYS
+            regime_bullish := true
+        if consec_below >= CONSEC_DAYS
+            regime_bullish := false
+else
+    regime_bullish := true
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 4: SIGNAL ENGINE
+// ══════════════════════════════════════════════════════════════════════
+bear_filter = raw_momentum > BEAR_MOM_FLOOR
+
+// Signal flags
+full_buy_signal   = regime_bullish and stock_eligible and raw_momentum > 0
+bear_buy_signal   = not regime_bullish and stock_eligible and bear_filter
+cash_signal       = not regime_bullish and not bear_filter
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 5: STRATEGY EXECUTION & RISK MANAGEMENT EXITS
+// ══════════════════════════════════════════════════════════════════════
+entry_signal = (full_buy_signal or bear_buy_signal) and in_date_range
+exit_signal  = (cash_signal or not stock_eligible) or not in_date_range
+
+// Target Quantity Calculation based on leverage input
+qty_to_trade = (strategy.equity * LEVERAGE) / close
+
+// Execute entry
+if entry_signal
+    strategy.entry("Long", strategy.long, qty=qty_to_trade)
+
+// Dynamic Risk Management Variables
+var float activeEntry = na
+var float activeSL    = na
+var float activeTP    = na
+var float trail_price = na
+
+if strategy.position_size > 0
+    if strategy.position_size[1] == 0
+        activeEntry := strategy.position_avg_price
+        activeSL    := use_sl ? strategy.position_avg_price * (1 - sl_pct / 100) : na
+        activeTP    := use_tp ? strategy.position_avg_price * (1 + tp_pct / 100) : na
+        trail_price := use_trail ? close * (1 - trail_pct / 100) : na
+        if use_trail
+            activeSL := trail_price
+    else
+        if use_trail
+            trail_price := math.max(na(trail_price) ? 0.0 : trail_price, close * (1 - trail_pct / 100))
+            activeSL    := trail_price
+else
+    activeEntry := na
+    activeSL    := na
+    activeTP    := na
+    trail_price := na
+
+// Dynamic Exit Orders for SL / TP
+if strategy.position_size > 0
+    strategy.exit("Exit Risk", "Long", 
+                  stop=use_trail ? activeSL : (use_sl ? activeSL : na), 
+                  limit=use_tp ? activeTP : na)
+
+// Close under normal signal engine exits
+if exit_signal
+    strategy.close("Long", comment="Exit Signal")
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 6: PLOT OVERLAYS ON PRICE CHART
+// ══════════════════════════════════════════════════════════════════════
+
+// ── Daily 200 SMA on Price Chart ──
+plot(show_sma200 and not na(d_sma_200) ? d_sma_200 : na, "Daily Stock 200 SMA", color=color.new(#2196F3, 20), linewidth=2)
+
+// ── ENTRY PRICE LINE ──
+plot(show_entry_lines and strategy.position_size > 0 ? activeEntry : na, "◆ Entry Price", color=C_BULL, linewidth=2, style=plot.style_linebr)
+
+// ── STOP LOSS LINE ──
+plot(show_entry_lines and strategy.position_size > 0 ? activeSL : na, "✕ Stop Loss", color=C_SL, linewidth=1, style=plot.style_linebr)
+
+// ── TAKE PROFIT LINE ──
+plot(show_entry_lines and strategy.position_size > 0 ? activeTP : na, "✓ Take Profit", color=C_TP, linewidth=1, style=plot.style_linebr)
+
+// ── Regime Background Tint ──
+bgcolor(show_regime ? (regime_bullish ? color.new(#00E676, 92) : color.new(#FF1744, 92)) : na, title="Regime Background")
+
+// ── Candle Coloring by Momentum ──
+color bar_color = risk_adj_mom >= 0 ? color.new(#00E676, 50) : color.new(#FF1744, 50)
+barcolor(show_bar_colors ? bar_color : na, title="Momentum Bar Color")
+
+// ── BUY / CASH Edge Signals ──
+buy_edge  = full_buy_signal and not full_buy_signal[1]
+cash_edge = cash_signal and not cash_signal[1]
+bear_edge = bear_buy_signal and not bear_buy_signal[1]
+
+plotshape(show_signals and buy_edge,
+          title="BUY Signal", text="BUY", textcolor=C_BULL,
+          style=shape.triangleup, location=location.belowbar,
+          color=C_BULL, size=size.normal)
+
+plotshape(show_signals and cash_edge,
+          title="CASH Signal", text="CASH", textcolor=C_BEAR,
+          style=shape.triangledown, location=location.abovebar,
+          color=C_BEAR, size=size.normal)
+
+plotshape(show_signals and bear_edge,
+          title="Bear Breakout", text="BEAR\nBUY", textcolor=C_NEUTRAL,
+          style=shape.triangleup, location=location.belowbar,
+          color=C_NEUTRAL, size=size.normal)
+
+// ── Entry/Exit Price Labels ──
+if buy_edge and show_signals
+    string txt = "BUY @ " + str.tostring(close, "#.##") + "\nRaw Mom: " + str.tostring(raw_momentum * 100, "#.##") + "%"
+    label.new(bar_index, low, txt, style=label.style_label_up, color=color.new(#00E676, 70), textcolor=C_BULL, size=size.small)
+
+if cash_edge and show_signals
+    string txt = "CASH @ " + str.tostring(close, "#.##")
+    label.new(bar_index, high, txt, style=label.style_label_down, color=color.new(#FF1744, 70), textcolor=C_BEAR, size=size.small)
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 7: PERFORMANCE & TELEMETRY DASHBOARD (Top-Right)
+// ══════════════════════════════════════════════════════════════════════
+var table info_table = table.new(position.top_right, 2, 15, 
+     bgcolor=C_PANEL_BG, border_width=1, 
+     border_color=color.new(#333366, 30), frame_width=2, 
+     frame_color=color.new(#BB86FC, 30))
+
+// Max drawdown tracker (percentage based on peak equity)
+var float peak_equity = strategy.initial_capital
+peak_equity := math.max(peak_equity, strategy.equity)
+drawdown_pct = peak_equity > 0 ? (peak_equity - strategy.equity) / peak_equity * 100 : 0.0
+var float max_drawdown_pct = 0.0
+max_drawdown_pct := math.max(max_drawdown_pct, drawdown_pct)
+
+// Check historical bar buffer requirements
+total_daily_bars = request.security(syminfo.tickerid, "1D", bar_index + 1)
+history_ok = not na(total_daily_bars) and total_daily_bars >= 252
+
+if show_dashboard and barstate.islast
+    // Header
+    table.cell(info_table, 0, 0, "ALPHA MOMENTUM V2", text_color=color.white, text_size=size.normal, bgcolor=color.new(#BB86FC, 20), text_halign=text.align_center)
+    table.merge_cells(info_table, 0, 0, 1, 0)
+    
+    // --- Indicator Telemetry Header / Buffer Warning ---
+    if history_ok
+        table.cell(info_table, 0, 1, "INDICATOR TELEMETRY", text_color=C_NEUTRAL, text_size=size.small, bgcolor=color.new(#1a1a2e, 0), text_halign=text.align_center)
+        table.merge_cells(info_table, 0, 1, 1, 1)
+    else
+        table.cell(info_table, 0, 1, "⚠️ SCROLL LEFT TO LOAD MORE DATA (" + str.tostring(total_daily_bars) + "/252 Days)", text_color=C_BEAR, text_size=size.small, bgcolor=color.new(#1a1a2e, 0), text_halign=text.align_center)
+        table.merge_cells(info_table, 0, 1, 1, 1)
+    
+    table.cell(info_table, 0, 2, "Raw Mom", text_color=C_HEADER, text_size=size.small)
+    table.cell(info_table, 1, 2, str.tostring(raw_momentum * 100, "#.##") + "%", text_color=raw_momentum > 0 ? C_BULL : C_BEAR, text_size=size.small)
+    
+    table.cell(info_table, 0, 3, "Risk-Adj", text_color=C_HEADER, text_size=size.small)
+    info_color = risk_adj_mom > 0 ? C_BULL : C_BEAR
+    table.cell(info_table, 1, 3, str.tostring(risk_adj_mom, "#.###"), text_color=info_color, text_size=size.small)
+    
+    table.cell(info_table, 0, 4, "Vol (60d)", text_color=C_HEADER, text_size=size.small)
+    table.cell(info_table, 1, 4, str.tostring(vol_60 * 100, "#.#") + "%", text_color=C_TEXT, text_size=size.small)
+    
+    table.cell(info_table, 0, 5, "200 SMA", text_color=C_HEADER, text_size=size.small)
+    table.cell(info_table, 1, 5, above_trend ? "ABOVE ✅" : "BELOW ❌", text_color=above_trend ? C_BULL : C_BEAR, text_size=size.small)
+    
+    table.cell(info_table, 0, 6, "Regime", text_color=C_HEADER, text_size=size.small)
+    table.cell(info_table, 1, 6, regime_bullish ? "BULL 🟢" : "BEAR 🔴", text_color=regime_bullish ? C_BULL : C_BEAR, text_size=size.small)
+    
+    table.cell(info_table, 0, 7, "Regime Index", text_color=C_HEADER, text_size=size.small)
+    table.cell(info_table, 1, 7, has_regime_data ? str.tostring(nifty_close, "#.#") + " / " + str.tostring(nifty_sma, "#.#") : "NO DATA", text_color=nifty_above_sma ? C_BULL : C_BEAR, text_size=size.small)
+    
+    table.cell(info_table, 0, 8, "Turnover", text_color=C_HEADER, text_size=size.small)
+    table.cell(info_table, 1, 8, has_volume ? str.tostring(d_avg_turnover_20 / 1e7, "#.#") + " Cr" : "NO VOL", text_color=liquidity_ok ? C_BULL : C_BEAR, text_size=size.small)
+    
+    // --- Backtest Metrics Section ---
+    table.cell(info_table, 0, 9, "BACKTEST METRICS", text_color=C_NEUTRAL, text_size=size.small, bgcolor=color.new(#1a1a2e, 0), text_halign=text.align_center)
+    table.merge_cells(info_table, 0, 9, 1, 9)
+    
+    net_profit_pct = (strategy.netprofit / strategy.initial_capital) * 100
+    table.cell(info_table, 0, 10, "Net Profit", text_color=C_HEADER, text_size=size.small)
+    table.cell(info_table, 1, 10, str.tostring(net_profit_pct, "#.##") + "%", text_color=net_profit_pct >= 0 ? C_BULL : C_BEAR, text_size=size.small)
+    
+    win_rate = strategy.closedtrades > 0 ? (strategy.wintrades / strategy.closedtrades) * 100 : 0.0
+    table.cell(info_table, 0, 11, "Win Rate", text_color=C_HEADER, text_size=size.small)
+    table.cell(info_table, 1, 11, str.tostring(win_rate, "#.#") + "%", text_color=win_rate >= 50 ? C_BULL : C_TEXT, text_size=size.small)
+    
+    profit_factor = strategy.grossloss > 0 ? strategy.grossprofit / strategy.grossloss : na
+    pf_str = na(profit_factor) ? "N/A" : str.tostring(profit_factor, "#.##")
+    pf_color = na(profit_factor) ? C_TEXT : (profit_factor >= 1.5 ? C_BULL : (profit_factor >= 1.0 ? C_TEXT : C_BEAR))
+    table.cell(info_table, 0, 12, "Profit Factor", text_color=C_HEADER, text_size=size.small)
+    table.cell(info_table, 1, 12, pf_str, text_color=pf_color, text_size=size.small)
+    
+    table.cell(info_table, 0, 13, "Max Drawdown", text_color=C_HEADER, text_size=size.small)
+    table.cell(info_table, 1, 13, str.tostring(max_drawdown_pct, "#.##") + "%", text_color=C_BEAR, text_size=size.small)
+    
+    table.cell(info_table, 0, 14, "Total Trades", text_color=C_HEADER, text_size=size.small)
+    table.cell(info_table, 1, 14, str.tostring(strategy.closedtrades), text_color=C_TEXT, text_size=size.small)

@@ -1,0 +1,17 @@
+{
+    "nifty_level": 0,
+    "regime": "3D Trend Reversals",
+    "scanned_date": "2026-04-02",
+    "portfolio_value": 0,
+    "signals": [],
+    "sector_stats": {
+        "INDEX": {
+            "avg_score": 90,
+            "signal": "Macro"
+        },
+        "STOCK": {
+            "avg_score": 50,
+            "signal": "Volatile"
+        }
+    }
+}

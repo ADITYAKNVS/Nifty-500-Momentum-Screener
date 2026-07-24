@@ -1,0 +1,73 @@
+{
+    "nifty_level": 24013.1,
+    "regime": "Ridge_Pure_Active",
+    "scanned_date": "2026-06-19",
+    "portfolio_value": 1000000,
+    "signals": [
+        {
+            "ticker": "ATHERENERG",
+            "sector": "General",
+            "signal": "HOLD",
+            "price": 973.0,
+            "hold_period": "Ridge Pure Core Hold",
+            "allocation_pct": 22.0,
+            "max_volume_shrs": 103620,
+            "target_shrs": 226,
+            "tech_status": "HOLD"
+        },
+        {
+            "ticker": "LAURUSLABS",
+            "sector": "General",
+            "signal": "HOLD",
+            "price": 1411.199951171875,
+            "hold_period": "Ridge Pure Core Hold",
+            "allocation_pct": 22.0,
+            "max_volume_shrs": 117458,
+            "target_shrs": 155,
+            "tech_status": "HOLD"
+        },
+        {
+            "ticker": "HINDCOPPER",
+            "sector": "General",
+            "signal": "HOLD",
+            "price": 512.6500244140625,
+            "hold_period": "Ridge Pure Core Hold",
+            "allocation_pct": 22.0,
+            "max_volume_shrs": 159577,
+            "target_shrs": 429,
+            "tech_status": "HOLD"
+        },
+        {
+            "ticker": "OLAELEC",
+            "sector": "General",
+            "signal": "HOLD",
+            "price": 42.40999984741211,
+            "hold_period": "Ridge Pure Core Hold",
+            "allocation_pct": 22.0,
+            "max_volume_shrs": 5456365,
+            "target_shrs": 5187,
+            "tech_status": "HOLD"
+        },
+        {
+            "ticker": "NATIONALUM",
+            "sector": "General",
+            "signal": "HOLD",
+            "price": 376.0,
+            "hold_period": "Ridge Pure Core Hold",
+            "allocation_pct": 22.0,
+            "max_volume_shrs": 441224,
+            "target_shrs": 585,
+            "tech_status": "HOLD"
+        }
+    ],
+    "sector_stats": {
+        "General": {
+            "avg_score": 99,
+            "signal": "Bullish"
+        }
+    },
+    "system_status": {
+        "breaker_tripped": false,
+        "kill_switch_active": false
+    }
+}

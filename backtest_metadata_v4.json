@@ -1,0 +1,23 @@
+{
+  "version": "4.0",
+  "run_timestamp": "2026-04-08T17:20:51.065757",
+  "config": {
+    "INITIAL_CAPITAL": 1000000.0,
+    "TOP_N": 5,
+    "MOM_WINDOW": 252,
+    "ENABLE_REGIME_FILTER": true,
+    "ENABLE_CORR_FILTER": false,
+    "ENABLE_GRADUATED_EXPOSURE": false
+  },
+  "summary": {
+    "total_return": 7.998002822565377,
+    "cagr": 0.2213342425697422,
+    "sharpe": 0.7622761622634172,
+    "max_dd": -0.3911794101338209,
+    "final_capital": 8998002.822565377
+  },
+  "turnover": {
+    "annual_turnover": 9.348152328450947,
+    "cost_drag_pct": 0.05151257771260601
+  }
+}

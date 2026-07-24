@@ -1,0 +1,20 @@
+{
+    "scan_date": "2026-04-02",
+    "generated_at": "2026-04-08 21:23:58",
+    "scanner_version": "v5.0",
+    "market_regime": "BEARISH/SIDEWAYS",
+    "nifty_spot": 22766.6,
+    "nifty_sma100": 25569.43,
+    "total_opportunities": 0,
+    "index_calls": [],
+    "stock_calls": [],
+    "risk_parameters": {
+        "max_holding_days": 5,
+        "profit_target_r": 2.0,
+        "position_sizing_pct": 2.0,
+        "volume_min": 2.0,
+        "gap_filter_pct": 1.0,
+        "iv_long_max": 40,
+        "iv_short_min": 60
+    }
+}

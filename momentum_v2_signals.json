@@ -1,0 +1,187 @@
+{
+    "nifty_level": 24013.099609375,
+    "regime": "Mode_A_100_Cash",
+    "scanned_date": "2026-06-19",
+    "portfolio_value": 1000000,
+    "signals": [
+        {
+            "ticker": "ATHERENERG",
+            "sector": "General",
+            "signal": "TRACK",
+            "price": 973.0,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 128160,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        },
+        {
+            "ticker": "LAURUSLABS",
+            "sector": "General",
+            "signal": "TRACK",
+            "price": 1411.199951171875,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 97596,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        },
+        {
+            "ticker": "MCX",
+            "sector": "General",
+            "signal": "TRACK",
+            "price": 2804.5,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 148614,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        },
+        {
+            "ticker": "ACUTAAS",
+            "sector": "General",
+            "signal": "TRACK",
+            "price": 3252.0,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 18012,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        },
+        {
+            "ticker": "NATIONALUM",
+            "sector": "General",
+            "signal": "TRACK",
+            "price": 376.0,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 589167,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        },
+        {
+            "ticker": "BELRISE",
+            "sector": "General",
+            "signal": "TRACK",
+            "price": 240.24000549316406,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 198321,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        },
+        {
+            "ticker": "POWERINDIA",
+            "sector": "General",
+            "signal": "TRACK",
+            "price": 36740.0,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 5371,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        },
+        {
+            "ticker": "HINDCOPPER",
+            "sector": "General",
+            "signal": "TRACK",
+            "price": 512.6500244140625,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 175050,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        },
+        {
+            "ticker": "IDEA",
+            "sector": "General",
+            "signal": "TRACK",
+            "price": 14.890000343322754,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 23231902,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        },
+        {
+            "ticker": "ADANIPOWER",
+            "sector": "General",
+            "signal": "TRACK",
+            "price": 231.6999969482422,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 1727086,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        },
+        {
+            "ticker": "HINDALCO",
+            "sector": "Metals",
+            "signal": "TRACK",
+            "price": 1014.2000122070312,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 427261,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        },
+        {
+            "ticker": "GVT&D",
+            "sector": "General",
+            "signal": "TRACK",
+            "price": 5485.0,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 42719,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        },
+        {
+            "ticker": "NAVINFLUOR",
+            "sector": "General",
+            "signal": "TRACK",
+            "price": 7549.5,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 8333,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        },
+        {
+            "ticker": "SYRMA",
+            "sector": "General",
+            "signal": "TRACK",
+            "price": 1339.0,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 54856,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        },
+        {
+            "ticker": "KIRLOSENG",
+            "sector": "General",
+            "signal": "TRACK",
+            "price": 2000.0,
+            "hold_period": "God Mode Churn Buffer",
+            "allocation_pct": 0.0,
+            "max_volume_shrs": 17281,
+            "target_shrs": 0,
+            "tech_status": "CASH SECURED"
+        }
+    ],
+    "sector_stats": {
+        "General": {
+            "avg_score": 99,
+            "signal": "Bullish"
+        },
+        "Metals": {
+            "avg_score": 99,
+            "signal": "Bullish"
+        }
+    },
+    "system_status": {
+        "breaker_tripped": false,
+        "kill_switch_active": false
+    }
+}

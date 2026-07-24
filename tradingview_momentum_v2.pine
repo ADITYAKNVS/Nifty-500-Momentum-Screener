@@ -1,0 +1,259 @@
+// ══════════════════════════════════════════════════════════════════════
+// Alpha Momentum V2 (God Mode) — TradingView Indicator
+// Replicates: scanner_momentum_v2.py
+// Author: Aditya K
+// ══════════════════════════════════════════════════════════════════════
+// 
+// HOW TO USE:
+// 1. Open TradingView → open any NSE stock chart (e.g., NSE:RELIANCE)
+// 2. Go to Pine Editor (bottom panel) → paste this entire script
+// 3. Click "Add to Chart"
+// 4. The indicator will appear as a SEPARATE PANEL below the price chart
+//
+// WHAT YOU'LL SEE:
+// - Green histogram bars = positive risk-adjusted momentum (BUY zone)
+// - Red histogram bars   = negative risk-adjusted momentum (avoid)
+// - Blue line            = raw momentum score (%)
+// - Orange dashed line   = 0% reference line
+// - Green "▲ BUY" label  = all conditions met (momentum + trend + regime)
+// - Red "▼ CASH" label   = regime filter says go to cash
+// - 200 SMA on the PRICE chart (overlay)
+//
+// NOTE: This shows the indicator for INDIVIDUAL stocks.
+//       The Python scanner ranks ALL 500 stocks and picks the Top 5.
+//       TradingView can't do cross-sectional ranking, so use this to
+//       VERIFY signals after the Python scanner picks them.
+// ══════════════════════════════════════════════════════════════════════
+
+//@version=6
+indicator("Alpha Momentum V2 (God Mode)", shorttitle="Mom V2", 
+         overlay=false, precision=2)
+
+// ═══ ARCHITECTURE LOCKS (Matching Python exactly) ═══
+MOMENTUM_WINDOW = input.int(252,   "Momentum Lookback (bars)",      minval=50,  maxval=500,  tooltip="The undisputed king of net momentum — 1 year lookback")
+SKIP_DAYS       = input.int(21,    "Skip Days (mean-reversion)",    minval=0,   maxval=60,   tooltip="1-month mean-reversion firewall — skip recent month")
+REGIME_SMA_LEN  = input.int(100,   "Regime SMA Length",             minval=20,  maxval=300,  tooltip="Nifty 50 macro regime cutoff")
+TREND_SMA_LEN   = input.int(200,   "Stock Trend SMA",              minval=50,  maxval=300,  tooltip="Individual stock must be above this SMA")
+VOL_WINDOW      = input.int(60,    "Volatility Window (bars)",      minval=10,  maxval=120,  tooltip="60-day realized vol for risk-adjustment")
+CONSEC_DAYS     = input.int(3,     "Regime Confirmation Days",      minval=1,   maxval=10,   tooltip="Consecutive days to confirm regime flip")
+BEAR_MOM_FLOOR  = input.float(0.20,"Bear Mode Min Momentum",       minval=0.0, maxval=1.0,  step=0.05, tooltip="In bear market, require >20% absolute momentum")
+MIN_TURNOVER_CR = input.float(1.0, "Min Avg Turnover (₹ Crore)",   minval=0.1, maxval=50.0, step=0.5,  tooltip="Liquidity filter: average daily turnover")
+
+// ═══ VISUAL SETTINGS ═══
+show_regime     = input.bool(true,  "Show Regime Background",       group="Display")
+show_signals    = input.bool(true,  "Show BUY/CASH Labels",         group="Display")
+show_raw_mom    = input.bool(true,  "Show Raw Momentum Line",       group="Display")
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 1: MOMENTUM CALCULATION (Skip-Month Factor)
+// ══════════════════════════════════════════════════════════════════════
+
+// Price lookbacks (matching Python: Recent_Close / Prev_Close - 1)
+prev_close     = close[MOMENTUM_WINDOW]                // Price 252 bars ago
+recent_close   = close[SKIP_DAYS]                      // Price 21 bars ago (skip recent month)
+
+// Raw Momentum = (recent / far_back) - 1
+raw_momentum   = (recent_close / prev_close) - 1
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 2: RISK-ADJUSTED MOMENTUM (Momentum / Volatility)
+// ══════════════════════════════════════════════════════════════════════
+
+// Daily returns
+daily_ret = (close - close[1]) / close[1]
+
+// 60-day realized volatility, annualized (matching Python: std * sqrt(252))
+vol_60 = ta.stdev(daily_ret, VOL_WINDOW) * math.sqrt(252)
+
+// Risk-Adjusted Momentum = raw momentum / annualized vol
+// Guard against division by zero
+risk_adj_mom = vol_60 > 0.001 ? raw_momentum / vol_60 : raw_momentum
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 3: INDIVIDUAL STOCK TREND FILTER
+// ══════════════════════════════════════════════════════════════════════
+
+// Stock must be trading above its 200-day SMA
+sma_200 = ta.sma(close, TREND_SMA_LEN)
+above_trend = close > sma_200
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 4: MARKET REGIME DETECTION (Nifty 50 Proxy)
+// ══════════════════════════════════════════════════════════════════════
+// 
+// In Python, we download Nifty 50 (^NSEI) separately.
+// In TradingView, we pull it via request.security().
+// The 3-day consecutive confirmation logic is replicated exactly.
+// ══════════════════════════════════════════════════════════════════════
+
+// Fetch Nifty 50 daily close
+nifty_close = request.security("NSE:NIFTY", timeframe.period, close)
+nifty_sma   = request.security("NSE:NIFTY", timeframe.period, ta.sma(close, REGIME_SMA_LEN))
+
+// Is Nifty above its regime SMA today?
+nifty_above_sma = nifty_close > nifty_sma
+
+// Count consecutive days above / below (matching Python's hysteresis logic)
+var int consec_above = 0
+var int consec_below = 0
+var bool regime_bullish = true
+
+if nifty_above_sma
+    consec_above := consec_above + 1
+    consec_below := 0
+else
+    consec_below := consec_below + 1
+    consec_above := 0
+
+// Flip regime only after CONSEC_DAYS consecutive confirmation
+if consec_above >= CONSEC_DAYS
+    regime_bullish := true
+if consec_below >= CONSEC_DAYS
+    regime_bullish := false
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 5: LIQUIDITY FILTER
+// ══════════════════════════════════════════════════════════════════════
+
+turnover = close * volume
+avg_turnover_20 = ta.sma(turnover, 20)
+
+// Convert crore threshold to absolute (1 Crore = 1e7)
+liquidity_ok = avg_turnover_20 > (MIN_TURNOVER_CR * 1e7)
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 6: COMPOSITE SIGNAL
+// ══════════════════════════════════════════════════════════════════════
+
+// ALL conditions must be true for a valid BUY signal
+// (In Python, these are the filters before ranking)
+stock_eligible = above_trend and liquidity_ok and close > 10
+
+// Bear market has a higher momentum floor
+bear_filter = raw_momentum > BEAR_MOM_FLOOR
+
+// Final signal logic (matching Python's Mode A)
+full_buy_signal   = regime_bullish and stock_eligible and raw_momentum > 0
+bear_buy_signal   = not regime_bullish and stock_eligible and bear_filter
+cash_signal       = not regime_bullish and not bear_filter
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 7: PLOTTING
+// ══════════════════════════════════════════════════════════════════════
+
+// ─── Risk-Adjusted Momentum Histogram ───
+hist_color = risk_adj_mom >= 0 ? 
+             (risk_adj_mom > risk_adj_mom[1] ? color.new(#00C853, 0) : color.new(#00C853, 50)) : 
+             (risk_adj_mom < risk_adj_mom[1] ? color.new(#FF1744, 0) : color.new(#FF1744, 50))
+
+plot(risk_adj_mom, "Risk-Adj Momentum", style=plot.style_histogram, 
+     color=hist_color, linewidth=3)
+
+// ─── Raw Momentum Line ───
+plot(show_raw_mom ? raw_momentum * 100 / 10 : na, "Raw Momentum (scaled)", 
+     color=color.new(#2196F3, 20), linewidth=2,
+     style=plot.style_line)
+
+// ─── Zero Line ───
+hline(0, "Zero", color=color.new(#FF9800, 50), linestyle=hline.style_dashed, linewidth=1)
+
+// ─── Regime Background ───
+bgcolor(show_regime ? (regime_bullish ? color.new(#00C853, 92) : color.new(#FF1744, 92)) : na,
+        title="Regime Background")
+
+// ─── BUY / CASH Signal Labels ───
+// Only show on the bar where signal FIRST appears (edge detection)
+buy_edge  = full_buy_signal and not full_buy_signal[1]
+cash_edge = cash_signal and not cash_signal[1]
+
+plotshape(show_signals and buy_edge ? risk_adj_mom : na,
+          title="BUY Signal", text="BUY", textcolor=color.white,
+          style=shape.labelup, location=location.bottom,
+          color=color.new(#00C853, 0), size=size.small)
+
+plotshape(show_signals and cash_edge ? risk_adj_mom : na,
+          title="CASH Signal", text="CASH", textcolor=color.white,
+          style=shape.labeldown, location=location.top,
+          color=color.new(#FF1744, 0), size=size.small)
+
+// ─── Bear Breakout Signal (rare, only in bear markets with >20% momentum) ───
+bear_edge = bear_buy_signal and not bear_buy_signal[1]
+plotshape(show_signals and bear_edge ? risk_adj_mom : na,
+          title="Bear Breakout", text="BEAR\nBUY", textcolor=color.white,
+          style=shape.labelup, location=location.bottom,
+          color=color.new(#FF9800, 0), size=size.small)
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 8: 200 SMA OVERLAY ON PRICE CHART
+// ══════════════════════════════════════════════════════════════════════
+// This draws the 200 SMA directly on the main price chart
+// even though this indicator lives in a separate panel.
+
+// We plot it via a separate overlay indicator call — but TradingView
+// doesn't allow overlay=true and overlay=false in the same script.
+// So we use a plotchar trick to show trend status on the histogram.
+
+// Trend status dot on zero line
+plotchar(above_trend ? 0 : na, "Above 200 SMA", "●", 
+         location.absolute, color=color.new(#00C853, 30), size=size.tiny)
+plotchar(not above_trend ? 0 : na, "Below 200 SMA", "●", 
+         location.absolute, color=color.new(#FF1744, 30), size=size.tiny)
+
+// ══════════════════════════════════════════════════════════════════════
+// SECTION 9: INFO TABLE (Top-Right Corner)
+// ══════════════════════════════════════════════════════════════════════
+
+var table info_table = table.new(position.top_right, 2, 8, 
+     bgcolor=color.new(#1a1a2e, 10), border_width=1, 
+     border_color=color.new(#333366, 0), frame_width=2, 
+     frame_color=color.new(#333366, 0))
+
+if barstate.islast
+    // Header
+    table.cell(info_table, 0, 0, "MOMENTUM V2", text_color=color.new(#00C853, 0), 
+               text_size=size.small, bgcolor=color.new(#0d1117, 0))
+    table.cell(info_table, 1, 0, "GOD MODE", text_color=color.new(#FFD700, 0), 
+               text_size=size.small, bgcolor=color.new(#0d1117, 0))
+    
+    // Raw Momentum
+    table.cell(info_table, 0, 1, "Raw Mom", text_color=color.gray, text_size=size.small)
+    table.cell(info_table, 1, 1, str.tostring(raw_momentum * 100, "#.##") + "%", 
+               text_color=raw_momentum > 0 ? #00C853 : #FF1744, text_size=size.small)
+    
+    // Risk-Adj Momentum
+    table.cell(info_table, 0, 2, "Risk-Adj", text_color=color.gray, text_size=size.small)
+    table.cell(info_table, 1, 2, str.tostring(risk_adj_mom, "#.###"), 
+               text_color=risk_adj_mom > 0 ? #00C853 : #FF1744, text_size=size.small)
+    
+    // 60-Day Vol
+    table.cell(info_table, 0, 3, "Vol (60d)", text_color=color.gray, text_size=size.small)
+    table.cell(info_table, 1, 3, str.tostring(vol_60 * 100, "#.#") + "%", 
+               text_color=color.white, text_size=size.small)
+    
+    // Trend
+    table.cell(info_table, 0, 4, "200 SMA", text_color=color.gray, text_size=size.small)
+    table.cell(info_table, 1, 4, above_trend ? "ABOVE ✅" : "BELOW ❌", 
+               text_color=above_trend ? #00C853 : #FF1744, text_size=size.small)
+    
+    // Regime
+    table.cell(info_table, 0, 5, "Regime", text_color=color.gray, text_size=size.small)
+    table.cell(info_table, 1, 5, regime_bullish ? "BULL 🟢" : "BEAR 🔴", 
+               text_color=regime_bullish ? #00C853 : #FF1744, text_size=size.small)
+    
+    // Nifty vs SMA
+    table.cell(info_table, 0, 6, "Nifty", text_color=color.gray, text_size=size.small)
+    table.cell(info_table, 1, 6, str.tostring(nifty_close, "#.#") + " / " + str.tostring(nifty_sma, "#.#"),
+               text_color=nifty_above_sma ? #00C853 : #FF1744, text_size=size.small)
+    
+    // Liquidity
+    table.cell(info_table, 0, 7, "Turnover", text_color=color.gray, text_size=size.small)
+    table.cell(info_table, 1, 7, str.tostring(avg_turnover_20 / 1e7, "#.#") + " Cr", 
+               text_color=liquidity_ok ? #00C853 : #FF1744, text_size=size.small)
+
+// ══════════════════════════════════════════════════════════════════════
+// ALERTS (Set these up in TradingView for notifications)
+// ══════════════════════════════════════════════════════════════════════
+
+alertcondition(buy_edge,  "V2 BUY Signal",  "🟢 Alpha V2: {{ticker}} passed ALL momentum filters. Check scanner for ranking.")
+alertcondition(cash_edge, "V2 CASH Signal", "🔴 Alpha V2: Market regime turned BEARISH. Go to cash.")
+alertcondition(bear_edge, "V2 Bear Breakout","🟠 Alpha V2: {{ticker}} showing >20% momentum in BEAR market. Rare breakout.")
